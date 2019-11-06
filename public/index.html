@@ -1,0 +1,140 @@
+<html>
+<style>
+body{
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+}
+.borderContainer {
+	border:1px solid #000;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	padding:1em;
+
+}
+.formLine {
+	width:100%;
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+}
+.formHeader {
+	padding-bottom:0;
+	margin-bottom:0;
+}
+
+
+</style>
+
+<body>
+
+<h1>Welcome to the XSS demo</h1>
+
+<h3 class="formHeader">Create an Account</h3>
+<div class="borderContainer">
+	<div class="formLine">
+	<p>Username: &nbsp;</p>
+	<input id="signUpUsername" type="text">
+	</div>
+	<div class="formLine">
+	<p>Password: &nbsp;</p>
+	<input id="signUpPassword1" type="password">
+	</div>
+	<div class="formLine">
+	<p>Confirm: &nbsp;</p>
+	<input id="signUpPassword2" type="password">
+	</div>
+	<button onclick="signUp()">Sign Up</button>
+</div>
+</br>
+<h3 class="formHeader"> Log in </h3>
+
+<div class="borderContainer">
+	<div class="formLine">
+	<p>Username: &nbsp;</p>
+	<input id="logInUsername" type="text">
+	</div>
+	<div class="formLine">
+	<p>Password: &nbsp;</p>
+	<input id="logInPassword" type="text">
+	</div>
+	<button onclick="logIn()">Log In</button>
+</div>
+
+
+</body>
+
+<script>
+
+function logIn(){
+	let u = document.getElementById('logInUsername').value;
+	let p = document.getElementById('logInPassword').value;
+	
+	
+	if(p != null && u != null){
+		get('/logIn?password=' + p + "&username=" + u, function (r){
+			if(r.error){
+				console.log(r.error)
+			}
+			else{
+				console.log("logged in")
+				window.location = '/messager'
+			}
+			
+		})
+	}
+	else{
+		alert("username or password cannot be left empty")
+	}
+
+		
+	
+}
+
+function signUp(){
+	let u = document.getElementById('signUpUsername').value;
+	let p1 = document.getElementById('signUpPassword1').value;
+	let p2 = document.getElementById('signUpPassword2').value;
+	if(p1 == p2 ){
+		if(p1 != null && u != null){
+			
+			get('/signUp?password=' + p1 + "&username=" + u, function (r){
+				if(r.error){
+					console.log(r.error)
+				}
+				else{
+					window.location = '/messager'
+				}
+			})
+		}
+		else{
+			alert("username or password cannot be left empty")
+		}
+	}
+	else{
+		alert("passwords do not match")
+	}
+	
+}
+
+function get(url, cb, data){
+	if(data === undefined){
+		data = {}
+	}
+	var xmlhttp = new XMLHttpRequest();
+
+	xmlhttp.onreadystatechange = function() {
+	    if (this.readyState == 4 && this.status == 200) {
+	        cb(JSON.parse(this.responseText))
+	    }
+	};
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send(data);
+}
+
+
+
+</script>
+
+</html>

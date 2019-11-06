@@ -1,0 +1,280 @@
+<html>
+<style>
+body{
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+}
+.borderContainer {
+	border:1px solid #000;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	padding:1em;
+
+}
+.formLine {
+	width:100%;
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+}
+.formHeader {
+	padding-bottom:0;
+	margin-bottom:0;
+}
+
+
+.chatContainer {
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	margin:0;
+	padding:0;
+	width:70%;
+	height:70vh;
+	border:1px solid #000;
+
+}
+.chatWindow {
+	width:100%;
+	height:100%;
+	border-bottom:1px solid #888;
+	margin:0px;
+	padding:0px;
+	overflow-y: auto;
+
+	overflow-x:hidden;
+
+
+	
+	background-color: #feffff;
+
+
+
+}
+.chatInputLine {
+	width:100%;
+	display:flex;
+}
+
+div.chatInputLine input{
+	font-size:20px;
+	flex-grow:1;
+}
+div.chatInputLine button {
+	font-size:20px;
+}
+
+
+.chatBubble {
+	font-size:20px;
+	max-width: 70%;
+	padding: 2px 10px;
+	margin: 10px 10px ;
+	border-radius: 6px;
+	position: relative;
+}
+.chatBubble > p {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	word-wrap: break-word;
+}
+.chatBubble.left {
+	background-color: #efefef;
+	float: left;
+	border-bottom-left-radius: 0px;
+	margin-left: 35px;
+	text-align: left;
+}
+.chatBubble.left div {
+	position: absolute;
+	height: 30px;
+	width: 30px;
+	margin-left: -45px;
+	border-radius: 50%;
+}
+.chatBubble.right {
+	background-color: #6666ff;
+	background-color: #ff5152;
+	color: #fff;
+	float: right;
+	border-bottom-right-radius: 0px; 
+	text-align: right;
+
+}
+.chatBubble.right div {
+	display: none;
+	/*position: absolute;
+	height: 30px;
+	width: 30px;
+	margin-left: -45px;
+	border-radius: 50%;*/
+}
+.chatBlock {
+  font-size: 14px;
+  padding: 0px;
+  /*margin-bottom: 0;*/
+  margin:0;
+	/*padding:0;*/
+  /*overflow: hidden;*/
+  width: 100%;
+  display: inline-block;
+}
+.chatBlock > p.username {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+  text-align: left;
+}
+
+
+</style>
+
+<body>
+
+<h1>Welcome <span id="usernameWelcome"></span> to the vulnerable messager</h1>
+
+<div class="chatContainer">
+<div id="chatWindow" class="chatWindow">
+	<!-- <div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
+	<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
+	<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
+	<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
+	<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
+	<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div> -->
+</div>
+<div class="chatInputLine"><input id="userMessage" type="text"><button onclick="sendMessage()">Send Message</button></div>
+</div>
+</br>
+
+<button onclick="window.location='/logout'">Log Out</button>
+</body>
+
+<script>
+
+//Globals
+let lastMessageNum = undefined;
+let user = {}//username, userid
+
+function sendMessage(){
+	let message = document.getElementById("userMessage").value
+	document.getElementById("userMessage").value = ""
+	if(message.length > 0){
+		ajax("/sendMessage", function(r){
+			//console.log(r)
+			getMessages(false);
+
+
+		}, {"message":message}, "POST");
+	}
+	
+}
+
+
+function addMessage(message){
+	let cw = document.getElementById("chatWindow")
+
+	// console.log(cw.scrollTop)
+	// console.log(cw.scrollHeight - cw.offsetHeight)
+	// console.log(cw.scrollHeight -cw.scrollTop - cw.clientHeight)
+	// console.log("___")
+
+	let atBottom = cw.scrollHeight -cw.scrollTop - cw.clientHeight < 1
+
+	cw.innerHTML+=`
+	<div class="chatBlock"><div class="chatBubble ` + (message.userid==user.userid?'right':'left') + `"><div style="background-color:`+ message.userid+`;"></div><p>`+ message.message+`</p></div></div>`;
+
+	if(atBottom){
+		cw.scrollTop = cw.scrollHeight;
+
+	}
+}
+//newMessages = [{"user":"test","userid":"#ceec80","message":"test message","messageNumber":-1}];
+
+
+function getMessages(loop){
+	console.log("getMessages")
+	if(loop === undefined){
+		loop = true;
+	}
+	ajax("/getMessages?messageNum="+lastMessageNum,function(r){
+		// console.log(r)
+
+		if(r.messages.length > 0){
+			
+			
+
+			for(let m = 0; m < r.messages.length; m++){
+				addMessage(r.messages[m])
+			}
+			lastMessageNum = r.messages[r.messages.length-1].messageNum;
+
+
+		}
+		if(loop){
+			setTimeout(getMessages,1000)
+
+		}
+
+	})
+
+	
+	
+	
+
+}
+
+
+function ajax(url, cb, data, method){
+	if(data === undefined){
+		data = {}
+	}
+	if(method === undefined){
+		method = "GET"
+	}
+	// console.log(data)
+	var xmlhttp = new XMLHttpRequest();
+
+
+
+	xmlhttp.onreadystatechange = function() {
+	    if (this.readyState == 4 && this.status == 200) {
+	        cb(JSON.parse(this.responseText))
+	    }
+	};
+	xmlhttp.open(method, url, true);
+	xmlhttp.setRequestHeader("Content-Type", "application/json");
+	xmlhttp.send(JSON.stringify(data));
+}
+
+ajax('/getUserData',function(r){
+
+	user.userid = r.userid
+	user.username = r.username
+
+	document.getElementById("usernameWelcome").innerHTML=`<span style="color:`+user.userid+`;text-decoration: underline;">`+user.username+`</span>`
+
+
+	document.getElementById("userMessage").addEventListener("keyup", function(event) {
+	    if (event.key === "Enter") {
+	        sendMessage()
+	    }
+	});
+
+	getMessages(true)
+})
+
+
+
+</script>
+
+</html>
