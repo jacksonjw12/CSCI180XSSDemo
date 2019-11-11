@@ -135,28 +135,30 @@ div.chatInputLine button {
 
 <body>
 
-<h1>Welcome <span id="usernameWelcome"></span> to the vulnerable messager</h1>
+	<h1>Welcome <span id="usernameWelcome"></span> to the vulnerable messager</h1>
 
-<div class="chatContainer">
-<div id="chatWindow" class="chatWindow">
-	<!-- <div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
-	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
-	<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
-	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
-	<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
-	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
-	<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
-	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
-	<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
-	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
-	<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
-	<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div> -->
-</div>
-<div class="chatInputLine"><input id="userMessage" type="text"><button onclick="sendMessage()">Send Message</button></div>
-</div>
-</br>
+	<div class="chatContainer">
+		<div id="chatWindow" class="chatWindow">
+			<!-- <div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+			<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
+			<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+			<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
+			<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+			<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
+			<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+			<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
+			<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+			<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div>
+			<div class="chatBlock"><div class="chatBubble right"><div style="background-color:orange;"></div><p>Test Message 1</p></div></div>
+			<div class="chatBlock"><div class="chatBubble left"><div style="background-color:green;"></div><p>Test Message 2</p></div></div> -->
+		</div>
+		<div class="chatInputLine"><input id="userMessage" type="text"><button onclick="sendMessage()">Send Message</button>
+		</div>
+	
+	</div>
+	</br>
 
-<button onclick="window.location='/logout'">Log Out</button>
+	<button onclick="window.location='/logout'">Log Out</button>
 </body>
 
 <script>
@@ -180,6 +182,13 @@ function sendMessage(){
 }
 
 
+/*
+
+</p><p style="display:none;" id="myAttack">console.log(123);console.log(document.cookie)
+
+<img src="empty.gif" onerror="eval(document.getElementById('myAttack').innerHTML);this.parentNode.removeChild(this);" />
+*/
+
 function addMessage(message){
 	let cw = document.getElementById("chatWindow")
 
@@ -197,6 +206,8 @@ function addMessage(message){
 		cw.scrollTop = cw.scrollHeight;
 
 	}
+	// document.body.innerHTML+= message.message
+
 }
 //newMessages = [{"user":"test","userid":"#ceec80","message":"test message","messageNumber":-1}];
 
