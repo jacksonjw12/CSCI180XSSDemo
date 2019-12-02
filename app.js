@@ -3,12 +3,14 @@ const app = express()
 
 
 var session = require('express-session')
-
+var {MemoryStore} = require('express-session')
+let store = new MemoryStore();
 app.use(session({
-  secret: 'aosdnaoisdiodankasndgjirnms',
-  resave: true,
-  saveUninitialized: false,
-  cookie: { secure: false }
+    secret: 'aosdnaoisdiodankasndgjirnms',
+    resave: true,
+    store,
+    saveUninitialized: false,
+    cookie: { secure: false }
 }))
 
 app.use(express.json())
@@ -84,6 +86,7 @@ app.get('/resetmessages',(req,res) => {
 app.get('/resetall',(req,res) => {
 	messages = [];
 	users = [];
+	store.clear();
 
 	res.redirect('/')
 })
