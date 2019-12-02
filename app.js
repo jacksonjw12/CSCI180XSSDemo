@@ -34,7 +34,7 @@ function addMessage(m){
 	}
 	messages.push(m);
 
-	
+
 }
 function getUnreadMessages(num){
 	console.log("getting unread messages : ",num)
@@ -77,7 +77,16 @@ app.get('/', (req, res) => {
 	}
 })
 
+app.get('/resetmessages',(req,res) => {
+	messages = [];
+	res.redirect('/')
+})
+app.get('/resetall',(req,res) => {
+	messages = [];
+	users = [];
 
+	res.redirect('/')
+})
 app.get('/messager', (req, res) => {
 	console.log(req.session.username)
 	console.log(users)
@@ -123,24 +132,24 @@ app.get('/login', (req, res) => {
 					res.send({"error":"invalid username or password"})
 				}
 
-				
+
 				break;
 			}
 		}
 
-		
+
 
 		res.send({"error":"invalid username or password"})
 	}
 
-	
+
 })
 function newId(){
 	var letters = "0123456789ABCD"
 	var color = "#"
-	for (var i = 0; i < 6; i++) 
+	for (var i = 0; i < 6; i++)
        color += letters[(Math.floor(Math.random() * 14))];
-    return color; 
+    return color;
 }
 
 app.get('/signup', (req, res) => {
@@ -169,7 +178,7 @@ app.get('/signup', (req, res) => {
 		res.send({"success":"signup up and logged in"})
 	}
 
-	
+
 })
 
 
@@ -187,8 +196,8 @@ app.post('/sendMessage', (req, res) => {
 			res.send({"error":"message body not received"})
 		}
 	}
-	
-	
+
+
 })
 
 app.get('/getMessages', (req, res) => {
